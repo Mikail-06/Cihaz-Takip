@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cihaz Ekle</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #98a0a8;
+            margin: 20px;
+        }
+
+        .form-container {
+            background-color: #6a6161;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #007bff;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            font-weight: bold;
+            color: #495057;
+        }
+
+        input[type="text"],
+        input.small-input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+            font-size: 14px;
+        }
+
+        .button-submit {
+            background-color: #007bff;
+            color: #fff;
+            padding: 12px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .button-submit:hover {
+            background-color: #0056b3;
+        }
+
+        a.back {
+            display: inline-block;
+            margin-top: 15px;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a.back:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <h2>Cihaz Ekle</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="button-submit">Kaydet</button>
+        </form>
+        <a href="{% url 'cihaz_list' %}" class="back">← Cihaz Listesine Dön</a>
+    </div>
+
+    <!-- Örnek tablo -->
+    <h4>CSV/Excel Örnek Tablo:</h4>
+    <table class="example-table">
+        <thead>
+            <tr>
+                <th>marka</th>
+                <th>model</th>
+                <th>destek_durumu</th>
+                <th>aciklama</th>
+                <th>musteri</th>
+                <th>test_durumu</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>HP</td>
+                <td>G4A8D9A</td>
+                <td>Kartlı</td>
+                <td>*</td>
+                <td>*</td>
+                <td>*</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>Sütun başlıkları bu sırada olmalı. * boş bırakılabilir.</p>
+</body>
+
+</html>

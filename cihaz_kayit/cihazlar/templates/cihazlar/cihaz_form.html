@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cihaz Ekle / Düzenle</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #f0f4f8, #d9e2ec);
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        form {
+            background-color: #fff;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        /* Uzun textarea'ları diğerleriyle aynı yükseklikte ayarla */
+        textarea {
+            resize: vertical;
+            height: 38px; /* input alanıyla uyumlu yükseklik */
+        }
+
+        button {
+            margin-top: 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 15px;
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>{% if form.instance.pk %}Cihaz Düzenle{% else %}Yeni Cihaz Ekle{% endif %}</h1>
+    <form method="post">
+        {% csrf_token %}
+
+        <label for="id_marka">Marka</label>
+        {{ form.marka }}
+
+        <label for="id_model">Model</label>
+        {{ form.model }}
+
+        <label for="id_destek_durumu">Destek Durumu</label>
+        {{ form.destek_durumu }}
+
+        <label for="id_aciklama">Açıklama</label>
+        {{ form.aciklama }}
+
+        <label for="id_musteri">Müşteri</label>
+        {{ form.musteri }}
+
+        <label for="id_test_durumu">Test Durumu</label>
+        {{ form.test_durumu }}
+
+        <!-- Yeni eklenen alanlar -->
+        <label for="id_platform">Platform</label>
+        {{ form.platform }}
+
+        <label for="id_note">Not</label>
+        {{ form.note }}
+
+        <label for="id_supported_features">Desteklenen Özellikler</label>
+        {{ form.supported_features }}
+
+        <label for="id_model_note">Model Notu</label>
+        {{ form.model_note }}
+
+        <button type="submit">Kaydet</button>
+    </form>
+    <a href="{% url 'cihaz_list' %}">&larr; Geri</a>
+</body>
+
+</html>

@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Entera Cihaz Takip</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            margin: 15px;
+        }
+
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            background: #b7e4c7;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        header h2 {
+            margin: 0;
+            color: #034732;
+        }
+
+        .button-add {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-bottom: 12px;
+            margin-right: 10px;
+            background: #a3d9a5;
+            color: #034732;
+        }
+
+        .button-add:hover {
+            opacity: .85;
+        }
+
+        input#searchInput {
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            margin-bottom: 10px;
+            width: 300px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #b7aeae;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, .1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            padding: 8px 10px;
+            text-align: center;
+            position: relative;
+            max-width: 150px;
+            word-break: normal;
+        }
+
+        th {
+            background: #529ded;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        tr:hover {
+            background: #e2e6ea;
+        }
+
+        .button {
+            padding: 5px 10px;
+            margin: 0 2px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .edit {
+            background: #28a745;
+        }
+
+        table,
+        th {
+            text-align: center;
+            text-overflow: ellipsis;
+            font-size: 15px;
+        }
+
+        td {
+            font-size: 15px;
+        }
+
+        .delete {
+            background: #dc3545;
+        }
+
+        tr.cakisiyor {
+            background: #e66e6e !important;
+        }
+
+        .filter-btn,
+        .sort-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 12px;
+            margin-left: 4px;
+            border: none;
+            color: #007bff;
+            cursor: pointer;
+        }
+
+        .dropdown {
+            position: absolute;
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+            max-height: 220px;
+            /* scroll için max yükseklik */
+            overflow-y: auto;
+            display: none;
+            z-index: 100;
+            min-width: 180px;
+            padding: 4px 0;
+            transition: all 0.2s ease;
+        }
+
+
+        .dropdown-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .dropdown-list li {
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+
+        .dropdown-list li:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .dropdown-item {
+            padding: 10px 16px;
+            font-size: 14px;
+            color: #1e293b;
+            cursor: pointer;
+            transition: background 0.25s, transform 0.15s;
+            border-radius: 8px;
+            margin: 2px 6px;
+        }
+
+        .dropdown-item:hover {
+            background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+            transform: translateX(3px);
+            color: #0284c7;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-8px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .dropdown.show {
+            display: inline-flex;
+        }
+
+        .dropdown select {
+            width: 100%;
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            background: #f9fafb;
+            appearance: none;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+        }
+
+
+        .dropdown select:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+        }
+
+        .dropdown select:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+            background: #fff;
+        }
+
+
+        .dropdown select option {
+            padding: 4px 6px;
+            font-size: 13px;
+        }
+
+        .dropdown::-webkit-scrollbar {
+            width: 6px;
+        }
+
+
+        .dropdown::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 6px;
+        }
+
+        .dropdown::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 6px;
+        }
+
+        .dropdown::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown::after {
+            content: "▾";
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color: #64748b;
+            pointer-events: none;
+        }
+
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 200;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 3% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 1000px;
+            max-width: 95%;
+            overflow-x: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .3);
+        }
+
+        .close-modal {
+            color: #aaa;
+            float: right;
+            font-size: 29px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-modal:hover {
+            color: #000;
+        }
+
+        .modal input[type="file"] {
+            margin-top: 15px;
+        }
+
+        .example-table {
+            border: 1px solid #bbb;
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .example-table th,
+        .example-table td {
+            border: 1px solid #bbb;
+            padding: 6px 10px;
+            text-align: left;
+            max-width: 250px;
+            word-break: normal;
+        }
+
+        .example-table th {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .example-table tr:nth-child(even) {
+            background-color: #f1f5f9;
+        }
+
+        .example-table tr:nth-child(odd) {
+            background-color: #fff;
+        }
+
+        .example-table tr:hover {
+            background-color: #cfe2ff;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h2>CİHAZ LİSTESİ</h2>
+    </header>
+
+    <a href="{% url 'cihaz_add' %}" class="button-add">+ Cihaz Ekle</a>
+    <a href="javascript:void(0);" class="button-add" id="uploadBtn">CSV / Excel Yükle</a>
+
+    <div id="uploadModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>CSV / Excel Örnek Yapısı</h3>
+            <table class="example-table">
+                <thead>
+                    <tr>
+                        <th>marka</th>
+                        <th>model</th>
+                        <th>destek_durumu</th>
+                        <th>aciklama</th>
+                        <th>musteri</th>
+                        <th>test_durumu</th>
+                        <th>platform</th>
+                        <th>note</th>
+                        <th>supported_features</th>
+                        <th>model_note</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>HP</td>
+                        <td>G4A8D9A</td>
+                        <td>Kartlı</td>
+                        <td>*</td>
+                        <td>*</td>
+                        <td>*</td>
+                        <td>*</td>
+                        <td>*</td>
+                        <td>*</td>
+                        <td>*</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>Sütun başlıkları bu sırada olmalı. * boş bırakılabilir.</p>
+            <input type="file" id="uploadInput">
+        </div>
+    </div>
+
+    <input type="text" id="searchInput" placeholder="Marka, Model, Destek Durumu veya Detay ara...">
+
+    <table id="cihazTable">
+        <thead>
+            <tr>
+                <th>Marka
+                    <button class="filter-btn" data-target="dropdown-marka">FİLTRE</button>
+                    <button class="sort-btn" data-col="0">A-Z/Z-A</button>
+                    <div class="dropdown" id="dropdown-marka"><select class="filter-select">
+                            <option value="">Tümü</option>
+                        </select></div>
+                </th>
+                <th>Model
+                    <button class="filter-btn" data-target="dropdown-model">FİLTRE</button>
+                    <button class="sort-btn" data-col="1">A-Z/Z-A</button>
+                    <div class="dropdown" id="dropdown-model"><select class="filter-select">
+                            <option value="">Tümü</option>
+                        </select></div>
+                </th>
+                <th>Destek Durumu</th>
+                <th>Açıklama</th>
+                <th>Müşteri</th>
+                <th>Test Durumu</th>
+                <th>Platform</th>
+                <th>Not</th>
+                <th>Desteklenen Özellikler</th>
+                <th>Model Notu</th>
+                <th>Detay</th>
+                <th>Eklenme Tarihi</th>
+                <th>Son Değiştirilme</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cihaz in cihazlar %}
+            {% if cihaz.visibility %}
+            <tr class="{% if cihaz in conflicts %}cakisiyor{% endif %}" data-id="{{ cihaz.id }}">
+                <td class="search-marka">{{ cihaz.marka }}</td>
+                <td class="search-model">{{ cihaz.model }}</td>
+                <td class="search-destek">{{ cihaz.destek_durumu }}</td>
+                <td>{{ cihaz.aciklama|default:"-" }}</td>
+                <td>{{ cihaz.musteri|default:"-" }}</td>
+                <td>{{ cihaz.test_durumu|default:"-" }}</td>
+                <td>{{ cihaz.platform|default:"-" }}</td>
+                <td>{{ cihaz.note|default:"-" }}</td>
+                <td>{{ cihaz.supported_features|default:"-" }}</td>
+                <td>{{ cihaz.model_note|default:"-" }}</td>
+                <td class="search-detay">
+                    {% if cihaz in conflicts %}
+                    Çakışıyor {% if cihaz.kaynak_dosya %}(Kaynak:{{ cihaz.kaynak_dosya }}){% else %}(Manuel olarak
+                    eklendi.){% endif %}
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
+                <td>{{ cihaz.eklenme_tarihi|date:"d-m-Y" }}</td>
+                <td>{{ cihaz.son_degistirilme|date:"d-m-Y H:i" }}</td>
+                <td>
+                    <a href="{% url 'cihaz_edit' cihaz.id %}" class="button edit">Düzenle</a>
+                    <button class="button delete" onclick="softDelete('{{ cihaz.id }}', this)">Sil</button>
+                </td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <script>
+        window.onload = function () {
+            const table = document.getElementById('cihazTable');
+            const tbody = table.querySelector('tbody');
+            const searchInput = document.getElementById('searchInput');
+            const state = { filters: { marka: "", model: "" }, sort: { colIndex: null, asc: true } };
+
+            function getRows() { return Array.from(tbody.querySelectorAll('tr')); }
+
+            function populateDropdowns() {
+                const rows = getRows();
+                const markaVals = [...new Set(rows.map(r => r.querySelector('.search-marka').textContent.trim()))].sort();
+                const modelVals = [...new Set(rows.map(r => r.querySelector('.search-model').textContent.trim()))].sort();
+                function fill(select, values) {
+                    const curr = select.value;
+                    select.innerHTML = '<option value="">Tümü</option>' + values.map(v => `<option value="${v}">${v}</option>`).join('');
+                    if ([...select.options].some(o => o.value === curr)) select.value = curr;
+                }
+                fill(document.querySelector('#dropdown-marka .filter-select'), markaVals);
+                fill(document.querySelector('#dropdown-model .filter-select'), modelVals);
+            }
+
+            function applyFilters() {
+                const rows = getRows();
+                const q = searchInput.value.toLowerCase();
+                rows.forEach(row => {
+                    const fMarka = state.filters.marka ? row.querySelector('.search-marka').textContent === state.filters.marka : true;
+                    const fModel = state.filters.model ? row.querySelector('.search-model').textContent === state.filters.model : true;
+                    const matchesSearch = !q || Array.from(row.children).some(td => td.textContent.toLowerCase().includes(q));
+                    row.style.display = (fMarka && fModel && matchesSearch) ? '' : 'none';
+                });
+            }
+
+            function sortTableByCol(colIndex) {
+                const asc = state.sort.colIndex === colIndex ? !state.sort.asc : true;
+                state.sort = { colIndex, asc };
+                const sorted = [...getRows()].sort((a, b) => {
+                    const t1 = a.children[colIndex].textContent.trim().toLowerCase();
+                    const t2 = b.children[colIndex].textContent.trim().toLowerCase();
+                    return asc ? t1.localeCompare(t2, 'tr') : t2.localeCompare(t1, 'tr');
+                });
+                sorted.forEach(r => tbody.appendChild(r));
+            }
+
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', e => {
+                    e.stopPropagation();
+                    const dd = document.getElementById(btn.dataset.target);
+                    const isOpen = dd.classList.contains('show');
+                    document.querySelectorAll('.dropdown.show').forEach(x => x.classList.remove('show'));
+                    if (!isOpen) {
+                        dd.style.top = btn.offsetTop + 'px';
+                        dd.style.left = (btn.offsetLeft + btn.offsetWidth) + 'px';
+                        dd.classList.add('show');
+                    }
+                });
+            });
+
+            document.querySelectorAll('.sort-btn').forEach(btn => {
+                btn.addEventListener('click', e => {
+                    const colIndex = parseInt(btn.dataset.col);
+                    sortTableByCol(colIndex);
+                });
+            });
+
+            document.addEventListener('click', e => {
+                if (!e.target.classList.contains('filter-btn') && !e.target.closest('.dropdown')) {
+                    document.querySelectorAll('.dropdown.show').forEach(dd => dd.classList.remove('show'));
+                }
+            });
+
+            document.querySelectorAll('.filter-select').forEach(select => {
+                select.addEventListener('change', () => {
+                    const colKey = select.closest('th').querySelector('.filter-btn').dataset.target.includes('marka') ? 'marka' : 'model';
+                    state.filters[colKey] = select.value;
+                    applyFilters();
+                });
+            });
+
+            searchInput.addEventListener('input', applyFilters);
+            populateDropdowns();
+            applyFilters();
+
+            const uploadBtn = document.getElementById('uploadBtn');
+            const uploadModal = document.getElementById('uploadModal');
+            const closeModal = document.querySelector('.close-modal');
+            const uploadInput = document.getElementById('uploadInput');
+
+            uploadBtn.addEventListener('click', () => uploadModal.style.display = 'block');
+            closeModal.addEventListener('click', () => uploadModal.style.display = 'none');
+            window.addEventListener('click', e => { if (e.target == uploadModal) uploadModal.style.display = 'none'; });
+
+            uploadInput.addEventListener('change', e => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = evt => {
+                    const data = new Uint8Array(evt.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+
+                    if (!jsonData.length) {
+                        alert("Dosya boş veya sadece başlık satırı var.");
+                        uploadInput.value = '';
+                        return;
+                    }
+
+                    let invalidRows = [];
+                    let validData = [];
+
+                    jsonData.forEach((row, index) => {
+                        const marka = row['marka']?.trim();
+                        const model = row['model']?.trim();
+                        const destek = row['destek_durumu']?.trim();
+                        if (!marka || !model || !destek) {
+                            invalidRows.push(index + 2);
+                        } else {
+                            validData.push({
+                                marka,
+                                model,
+                                destek_durumu: destek,
+                                aciklama: row['aciklama']?.trim() || "",
+                                musteri: row['musteri']?.trim() || "",
+                                test_durumu: row['test_durumu']?.trim() || "",
+                                platform: row['platform']?.trim() || "",
+                                note: row['note']?.trim() || "",
+                                supported_features: row['supported_features']?.trim() || "",
+                                model_note: row['model_note']?.trim() || ""
+                            });
+                        }
+                    });
+
+                    if (!validData.length) {
+                        alert("Geçerli satır yok. Dosya kaydedilmedi.");
+                        return;
+                    }
+
+                    if (invalidRows.length) {
+                        alert("Bazı satırlar eksik veya hatalı ve kaydedilmeyecek.\nProblemli satırlar: " + invalidRows.join(', '));
+                    }
+
+                    const csrfToken = '{{ csrf_token }}';
+                    const fileName = file.name;
+                    fetch("{% url 'cihaz_upload_ajax' %}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrfToken
+                        },
+                        body: JSON.stringify({ data: validData, fileName: fileName })
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert("Geçerli satırlar başarıyla kaydedildi.");
+                                location.reload();
+                            } else {
+                                alert("Hata: " + data.message);
+                            }
+                        })
+                        .catch(err => alert("Bir hata oluştu: " + err));
+                };
+                reader.readAsArrayBuffer(file);
+            });
+
+            window.softDelete = function (id, btn) {
+                if (!confirm("Cihaz silinecek. Devam edilsin mi?")) return;
+
+                fetch("{% url 'cihaz_delete' 0 %}".replace('/0/', '/' + id + '/'), {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            btn.closest('tr').remove();
+                        } else {
+                            alert("Silme işlemi başarısız: " + data.message);
+                        }
+                    })
+                    .catch(err => alert("Bir hata oluştu: " + err));
+            };
+        };
+
+    </script>
+</body>
+
+</html>
